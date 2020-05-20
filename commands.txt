@@ -1,0 +1,46 @@
+# Provision a Remote Docker Host
+docker-machine create m-docker \
+	--driver digitalocean \
+	--digitalocean-access-token=f08087c666db1a0e9eada4a4251deb5bd837ce361f21f5ea8965d5e6f44ea9bb \
+	--digitalocean-size=s-1vcpu-2gb \
+	--digitalocean-image=ubuntu-18-04-x64 \
+	--digitalocean-region=sgp1
+
+# Connect to Remote Docker Daemon
+$ docker-machine env m-docker
+	export DOCKER_TLS_VERIFY="1"
+	export DOCKER_HOST="tcp://178.128.97.198:2376"
+	export DOCKER_CERT_PATH="/home/user/.docker/machine/machines/m-docker"
+	export DOCKER_MACHINE_NAME="m-docker"
+	# Run this command to configure your shell: 
+	# eval $(docker-machine env m-docker)
+
+# tag with git commit hash
+docker build -t dockerhubuser/image:$(git rev-parse --short HEAD) .
+# multiple tags for same image
+docker tag dockerhubuser/image:gitcommithash dockerhubuser/image:v1
+
+echo $? for linux return code for prev command
+
+export KUBECONFIG=$(pwd)/m-k8-kubeconfig.yaml
+86488  ll $KUBECONFIG
+86489  kubectl version
+86490  kubectl get nodes
+86494  kubectl get nodes -o wide
+
+86492  kubectl get nodes pool-2bwpoxkvr-3ckck -o wide
+
+86496  kubectl describe nodes/pool-2bwpoxkvr-3ckck
+86497  kubectl get nodes pool-2bwpoxkvr-3ckck -o yaml
+86498  kubectl get nodes -o yaml
+86499  kubectl cluster-info
+86500  kubectl get ns
+86501  kubectl get pod
+86502  kubectl get pod -n kube-public
+86503  kubectl get pod -n kube-system
+86505  kubectl get all -A
+86508  kubectl describe pod/cilium-6l2cs -n kube-system
+86509  kubectl create ns myns
+86510  kubectl get ns
+86511  cd -
+86514  kubectl delete ns/myns

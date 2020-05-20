@@ -1,0 +1,33 @@
+# kubectl apply -f fortune-k8.yml --record
+# kubectl get all,ns -A --selector dept=engineering
+# kubectl exec pod/fortune-pod -it -n myns -- bash
+# kubectl port-forward pod/fortune-pod 3000:8080 -n myns
+# kubectl delete -f fortune-k8.yml
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: myns
+  labels: 
+    dept: engineering
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fortune-pod
+  namespace: myns
+  labels:
+    dept: engineering
+    app: fortune
+spec:
+  containers:
+  - name: fortune-container
+    image: chukmunnlee/fortune:v1
+    imagePullPolicy: IfNotPresent
+    env:
+    - name: APP_PORT
+      value: "8080"
+    ports:
+      - name: fortune-port
+        containerPort: 8080
