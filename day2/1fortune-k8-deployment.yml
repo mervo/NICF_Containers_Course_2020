@@ -27,7 +27,6 @@ spec:
       dept: engineering
       app: fortune-pod
   template:
-    # pod yml
     metadata:
       name: fortune-pod
       namespace: myns
