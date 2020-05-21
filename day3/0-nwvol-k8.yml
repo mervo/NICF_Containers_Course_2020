@@ -1,0 +1,19 @@
+# kubectl get sc
+# watch kubectl get all,pvc,pv -n nwapp -o wide
+# kubectl api-resources
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nwdb-pvc # persistent vol claim
+  labels: 
+    app: northwind
+
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: do-block-storage
