@@ -1,3 +1,4 @@
+Day 1
 # Provision a Remote Docker Host
 docker-machine create m-docker \
 	--driver digitalocean \
@@ -22,6 +23,7 @@ docker tag dockerhubuser/image:gitcommithash dockerhubuser/image:v1
 
 echo $? for linux return code for prev command
 
+Day 2
 export KUBECONFIG=$(pwd)/m-k8-kubeconfig.yaml
 86488  ll $KUBECONFIG
 86489  kubectl version
@@ -44,3 +46,14 @@ export KUBECONFIG=$(pwd)/m-k8-kubeconfig.yaml
 86510  kubectl get ns
 86511  cd -
 86514  kubectl delete ns/myns
+
+Day 3
+helm install nginx-ingress stable/nginx-ingress --version 1.37.0 -n nginx-ingress
+minikube addons list
+helm list -A
+helm uninstall <name>
+kubectl top nodes # see if any metric server running
+kubectl api-resources | grep hpa
+siege -c20 -v http://nwapp.167.172.6.184.nip.io/
+
+Day 4
