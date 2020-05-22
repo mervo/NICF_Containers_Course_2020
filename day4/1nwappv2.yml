@@ -7,7 +7,7 @@ metadata:
     app: northwind
 data:
   DB_USER: root
-  DB_HOST: nwdb-svc.nwapp.svc.cluster.local
+  DB_HOST: nwdb-mysql-master.nwapp.svc.cluster.local
   DB_PASSWORD: changeit
 ---
 apiVersion: apps/v1
@@ -22,6 +22,11 @@ spec:
   selector:
     matchLabels:
       app: nwapp-pod
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
   template:
     metadata:
       name: nwapp-pod
@@ -31,7 +36,7 @@ spec:
     spec:
       containers:
       - name: nw-container
-        image: chukmunnlee/nwapp:v1
+        image: stackupiss/northwind-app:v2
         imagePullPolicy: IfNotPresent
         resources:
           requests:
@@ -50,8 +55,8 @@ spec:
         - name: DB_PASSWORD
           valueFrom:
               secretKeyRef:
-                name: nwdb-secret
-                key: MYSQL_ROOT_PASSWORD
+                name: nwdb-cluster-secret
+                key: ROOT_PASSWORD
         - name: INSTANCE_IP_ADDRESS
           valueFrom:
               fieldRef:
@@ -94,7 +99,7 @@ metadata:
     nginx.ingress.kubernetes.io/limit-rpm: "15"
 spec:
   rules: 
-  - host: "nwapp.167.172.6.184.nip.io"
+  - host: "nwapp.188.166.206.11.nip.io"
     http:
       paths: 
       - path: /
@@ -116,18 +121,3 @@ spec:
   targetCPUUtilizationPercentage: 20
   minReplicas: 2
   maxReplicas: 5
-# --- #headless service, no ip address, need to come from outside
-#   apiVersion: v1
-#   kind: Service
-#   metadata:
-#     name: nwdb-svc
-#     labels:
-#       app: northwind
-#   spec:
-#     type: ClusterIP
-#     selector:
-#       app: northwind-pod
-#     ports:
-#     - name: db-port
-#       port: 3306
-#       targetPort: northdb-port
